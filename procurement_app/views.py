@@ -22,6 +22,7 @@ from procurement_app.serializers import (
     ReceiptValidationResultSerializer,
 )
 from procurement_app.services import workflow
+from procurement_app.filters import PurchaseRequestFilter
 
 
 @cache_page(60)
@@ -46,6 +47,10 @@ class PurchaseRequestViewSet(viewsets.ModelViewSet):
         .select_related("created_by", "purchase_order", "receipt_validation")
         .prefetch_related("items", "approvals", "extraction_results")
     )
+    filterset_class = PurchaseRequestFilter
+    search_fields = ["title", "reference", "vendor_name", "created_by__full_name"]
+    ordering_fields = ["created_at", "amount_estimated", "needed_by"]
+    ordering = ["-created_at"]
 
     action_serializer_classes = {
         "approve": ApprovalActionSerializer,
@@ -202,6 +207,10 @@ class FinanceRequestViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, vi
     serializer_class = PurchaseRequestSerializer
     permission_classes = [IsAuthenticated, IsFinance]
     queryset = PurchaseRequestViewSet.queryset
+    filterset_class = PurchaseRequestFilter
+    search_fields = ["title", "reference", "vendor_name", "created_by__full_name"]
+    ordering_fields = ["created_at", "amount_estimated"]
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         qs = super().get_queryset()
