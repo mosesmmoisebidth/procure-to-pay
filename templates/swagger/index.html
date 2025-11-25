@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+    <style>
+        body {
+            margin: 0;
+            background: #fafafa;
+        }
+        .auth-toolbar {
+            padding: 12px 24px;
+            background: #1f2937;
+            color: #fff;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .auth-toolbar button {
+            background: #10b981;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .auth-toolbar button.secondary {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-toolbar">
+    <strong>{{ title }}</strong>
+    <span style="flex:1"></span>
+    <button type="button" onclick="authorizeToken()">Authorize Token</button>
+    <button type="button" class="secondary" onclick="clearToken()">Clear Token</button>
+</div>
+<div id="swagger-ui"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+<script>
+    const schemaUrl = "{{ schema_url }}";
+
+    function getStoredToken() {
+        return window.localStorage.getItem("swagger_token") || "";
+    }
+
+    function authorizeToken() {
+        const existing = getStoredToken();
+        const token = window.prompt('Enter API token (without the "Token " prefix):', existing);
+        if (token === null) {
+            return;
+        }
+        const trimmed = token.trim();
+        if (!trimmed) {
+            window.alert("Empty token ignored.");
+            return;
+        }
+        window.localStorage.setItem("swagger_token", trimmed);
+        window.alert("Token saved. Try executing an API call.");
+    }
+
+    function clearToken() {
+        window.localStorage.removeItem("swagger_token");
+        window.alert("Token cleared. Future calls will be anonymous.");
+    }
+
+    window.ui = SwaggerUIBundle({
+        url: schemaUrl,
+        dom_id: '#swagger-ui',
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        requestInterceptor: function (request) {
+            const token = getStoredToken();
+            if (token) {
+                request.headers = request.headers || {};
+                if (!request.headers['Authorization']) {
+                    request.headers['Authorization'] = token.startsWith("Token ") ? token : `Token ${token}`;
+                }
+            }
+            return request;
+        }
+    });
+</script>
+</body>
+</html>
