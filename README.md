@@ -36,4 +36,21 @@ make lint                             # ruff lint (PEP 8, import order)
 ./scripts/run_quality_checks.sh
 ```
 
+## Running with Docker Compose
+
+1. Copy `.env.example` to `.env` and adjust secrets as needed.
+2. Build and start the stack (Postgres, Django, Prometheus, Grafana):
+
+```bash
+docker compose up --build
+```
+
+Services:
+
+- Django API: http://localhost:8000
+- Prometheus: http://localhost:9090 (scrapes `/metrics` from Django automatically)
+- Grafana: http://localhost:3000 (default credentials admin/admin)
+
+Prometheus reads `prometheus.yml` and targets the `web` service inside the compose network. Grafana stores dashboards in the `grafana_data` volume.
+
 See `docs/MAINTENANCE.md` for architectural notes and `docs/STANDARDS.md` for coding conventions.

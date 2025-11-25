@@ -13,3 +13,5 @@ django-prometheus==2.3.1
 python-dotenv>=1.0,<2
 ruff>=0.6,<0.7
 colorlog>=6.9,<7
+django-cors-headers>=4.4,<5
+psycopg2-binary>=2.9,<3
