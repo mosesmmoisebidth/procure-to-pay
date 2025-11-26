@@ -13,4 +13,7 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
+# Simple boot log for pipeline verification.
+print('Smart P2P Django server is starting via WSGI...')
+
 application = get_wsgi_application()
