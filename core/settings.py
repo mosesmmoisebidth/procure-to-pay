@@ -288,6 +288,8 @@ DOC_AI_PROVIDER = env('DOC_AI_PROVIDER', 'layoutlmv3')
 GEMINI_API_KEY = env('GEMINI_API_KEY', '')
 GEMINI_MODEL_NAME = env('GEMINI_MODEL_NAME', 'gemini-2.5-pro')
 OPENAI_API_KEY = env('OPENAI_API_KEY', '')
+RESEND_API_KEY = env('RESEND_API_KEY', '')
+RESEND_FROM_EMAIL = env('RESEND_FROM_EMAIL', '')
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration

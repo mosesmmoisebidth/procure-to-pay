@@ -20,6 +20,7 @@ Key environment knobs are defined in `.env.example`. The app refuses to start if
 - `GET /metrics` &rarr; Prometheus metrics via `django-prometheus`.
 - Structured JSON logs in `logs/p2p.log`, plus colorized console output for local debugging.
 - Optional Sentry integration (set `SENTRY_DSN`).
+- Outbound email notifications use [Resend](https://resend.com/) &mdash; set `RESEND_API_KEY` and `RESEND_FROM_EMAIL` in `.env` to enable staff/approver notifications.
 - Request/receipt uploads validated for type and size; throttles guard login and heavy AI operations.
 - **Automation helpers**
   - `scripts/observe.sh` &mdash; hits `/health/`, previews `/metrics`, and tails `logs/p2p.log`.

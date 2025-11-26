@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from procurement_app.models import Approval, PurchaseRequest
 
-from . import po_generation
+from . import po_generation, notifications
 
 User = get_user_model()
 
@@ -60,12 +60,13 @@ def approve_request(purchase_request_id, user: User, comment: str = "") -> Purch
     level = request_obj.current_approval_level
     _validate_user_for_level(user, level)
 
+    clean_comment = _clean_comment(comment)
     Approval.objects.create(
         purchase_request=request_obj,
         approver=user,
         level=level,
         decision=Approval.Decision.APPROVED,
-        comment=_clean_comment(comment),
+        comment=clean_comment,
     )
 
     remaining = _decrement_required_levels(request_obj)
@@ -81,7 +82,11 @@ def approve_request(purchase_request_id, user: User, comment: str = "") -> Purch
         request_obj.current_approval_level = min(request_obj.current_approval_level + 1, level + 1)
         update_fields.append("current_approval_level")
         request_obj.save(update_fields=update_fields)
+        next_role = ROLE_BY_LEVEL.get(request_obj.current_approval_level)
+        notifications.notify_intermediate_approval(request_obj, user, next_role)
+        return request_obj
 
+    notifications.notify_final_approval(request_obj, user)
     return request_obj
 
 
@@ -101,17 +106,18 @@ def reject_request(purchase_request_id, user: User, comment: str = "") -> Purcha
     level = request_obj.current_approval_level
     _validate_user_for_level(user, level)
 
+    clean_comment = _clean_comment(comment)
     Approval.objects.create(
         purchase_request=request_obj,
         approver=user,
         level=level,
         decision=Approval.Decision.REJECTED,
-        comment=_clean_comment(comment),
+        comment=clean_comment,
     )
 
     request_obj.status = PurchaseRequest.Status.REJECTED
     request_obj.updated_at = timezone.now()
     request_obj.required_approval_levels = 0
     request_obj.save(update_fields=["status", "required_approval_levels", "updated_at"])
-
+    notifications.notify_rejection(request_obj, user, clean_comment)
     return request_obj
