@@ -32,6 +32,7 @@ services:
       - db
     volumes:
       - .:/app
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus:latest
@@ -44,6 +45,7 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     depends_on:
       - web
+    restart: unless-stopped
 
   grafana:
     image: grafana/grafana:latest
@@ -57,6 +59,7 @@ services:
       - prometheus
     volumes:
       - grafana_data:/var/lib/grafana
+    restart: unless-stopped
 
 volumes:
   postgres_data:
