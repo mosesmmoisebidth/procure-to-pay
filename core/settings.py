@@ -30,7 +30,7 @@ load_dotenv(BASE_DIR / ".env")
 LOG_LEVEL = env("LOG_LEVEL", "INFO")
 SENTRY_DSN = env("SENTRY_DSN", "")
 LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(exist_ok=True)
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 LOG_FILE = LOG_DIR / "p2p.log"
 
 

@@ -16,8 +16,9 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-RUN groupadd --system app && useradd --system --gid app app
-RUN mkdir -p /app/logs && chown -R app:app /app/logs
+RUN groupadd --system app && useradd --system --gid app app \
+    && mkdir -p /app/logs \
+    && chown -R app:app /app
 USER app
 
 EXPOSE 8000
