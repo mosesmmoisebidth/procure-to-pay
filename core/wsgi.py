@@ -15,5 +15,5 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
 # Simple boot log for pipeline verification.
 print('Smart P2P Django server is starting via WSGI...')
-
+print("Adding aother print statement here")
 application = get_wsgi_application()
