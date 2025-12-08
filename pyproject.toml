@@ -1,0 +1,16 @@
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["."]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B"]
+ignore = [
+    "E203",  # handled by formatter
+    "W503",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["core", "accounts", "documents", "procurement_app", "tests"]
+combine-as-imports = true
+lines-after-imports = 2

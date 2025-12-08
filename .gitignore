@@ -1,0 +1,54 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+venv/
+env/
+.venv/
+.env/
+
+firebase_service_account.json
+
+# Django / DRF
+db.sqlite3
+media/
+staticfiles/
+
+# Logs
+*.log
+*.pot
+
+# IDE / Editors
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python tooling
+.mypy_cache/
+.pytest_cache/
+pip-wheel-metadata/
+procure-to-pay-client/
+data/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Local env files
+.env.local
+.env.*.local
+*.env
+
+# Node/Yarn (if frontend added later)
+node_modules/
+*.tsbuildinfo
+
+logs/
